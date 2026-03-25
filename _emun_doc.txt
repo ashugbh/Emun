@@ -1,0 +1,240 @@
+pages 6
+
+--- PAGE 1 ---
+
+Emun
+Product and Technical Documentation
+Side Project Concept for a Mobile and Web Marketplace Platform
+Project type Broker / marketplace platform
+Primary goalConnect buyers and sellers efficiently with trust, 
+discoverability, and simple communication
+Initial MVP focusListings, search, categories, seller profiles, and 
+contact flow
+Recommended approachBuild mobile-first with a responsive web version and 
+a modular backend
+Prepared for planning purposes | March 25, 2026
+--- PAGE 2 ---
+
+1. Project Overview
+Emun is a marketplace platform designed to make it easy for people to list items for sale and for buyers to 
+discover, compare, and contact sellers in one place. The platform can support major categories such as 
+homes, phones, computers, vehicles, appliances, furniture, and general goods.
+The main value proposition is convenience: users should be able to create listings quickly, search with 
+confidence, and communicate without friction. For a side project, the product should remain focused on the  
+core transaction journey instead of trying to solve every marketplace problem on day one.
+1.1 Concept and Objectives
+Create a trusted space where people can post items for sale and browse offers by category, location, 
+and price.
+Reduce the effort required to find relevant listings through good search, filters, and recommendation 
+logic.
+Provide a lightweight broker experience that helps buyers and sellers connect without unnecessary 
+steps.
+Build a product that can start small as an MVP and grow into a multi-category marketplace over time.
+1.2 Target Users and Market Needs
+Individual sellers who want a simple way to advertise personal items.
+Small businesses and dealers who need regular listings and lead generation.
+Buyers who want faster discovery, better filtering, and direct contact with sellers.
+Administrators or moderators who need to manage listings, reported content, and trust issues.
+Typical market needs include better discovery, better trust, and faster interaction. Most marketplace users 
+do not want a complicated checkout flow for every item; they want a practical way to find an item, assess it,  
+and contact the seller quickly.
+2. Core Features
+The initial feature set should be shaped around the listing lifecycle: create, discover, contact, and manage.
+2.1 User Registration and Profiles
+Sign up and login using email, phone number, or social authentication.
+Basic profile fields such as name, avatar, location, bio, and contact preferences.
+Seller profile page showing active listings, past listings, and rating or trust indicators.
+Optional verification badges for phone number, email, and identity later in the roadmap.
+2.2 Item Listing and Categorization
+Create listing form with title, description, price, category, subcategory, condition, location, and photos.
+Support for draft saving so sellers can finish later.
+Category hierarchy and tags to improve search and browsing.
+Promoted attributes for specific item types, for example bedrooms for homes or RAM/storage for 
+phones and PCs.
+2.3 Search and Filtering System
+Keyword search across title, description, category, and tags.
+Filters for price range, location, condition, category, date posted, and seller type.
+Sorting by newest, price low to high, price high to low, and relevance.
+Saved searches and favorites for returning users.
+--- PAGE 3 ---
+
+2.4 Messaging or Contact System
+In-app chat for buyer-seller communication.
+Alternative contact options such as tap-to-call or WhatsApp link where appropriate.
+Read receipts, message timestamps, and spam controls.
+Message moderation and reporting tools for abusive or fraudulent behavior.
+2.5 Payment or Transaction Facilitation
+For a marketplace like Emun, full in-app payment can be introduced later. The MVP can start with lead 
+generation and direct contact. If transactions are later handled in-app, the platform can support escrow, 
+service fees, featured payment requests, and transaction status tracking.
+Phase 1: contact-only marketplace with no embedded payment.
+Phase 2: optional deposit or reservation payment for selected categories.
+Phase 3: full marketplace payments, commissions, and transaction history.
+2.6 Suggested Feature Scope by Release
+Feature Area MVP Version 1 Later
+Authentication Email / phone sign-up Social login, verification SSO and identity checks
+Listings Create, edit, delete, photos Drafts, bulk upload Auto-suggested fields
+Discovery Search, category browsingAdvanced filters, saved 
+searchesRecommendations
+Communication Direct contact links In-app chat Moderation and analytics
+Payments Not included Optional reservations Escrow / commissions
+Trust & Safety Report listing, admin reviewSeller badges, moderation 
+queueFraud detection rules
+3. System Design
+A modular architecture is the safest choice for a side project. It keeps the MVP simple while leaving room 
+for separate mobile and web clients later.
+3.1 Recommended Architecture
+Layer Recommended Responsibility
+FrontendFlutter mobile app and optionally Flutter Web or a React-
+based web client for responsive browsing.
+Backend APIREST or GraphQL API for authentication, listings, search, 
+messaging, media, and admin actions.
+DatabaseRelational database for users, listings, messages, 
+categories, favorites, and moderation records.
+File Storage Object storage for listing photos and documents.
+SearchDatabase search initially, then a dedicated search engine 
+once the catalog grows.
+NotificationsPush notifications, email, and possibly SMS for alerts and 
+verification.
+3.2 Suggested Technology Stack
+Area Suggested Option Why it fits Emun
+Mobile app FlutterFast cross-platform development and 
+one codebase for iOS and Android.
+Web app Flutter Web or Next.jsFlutter Web for consistency, Next.js if 
+you want stronger SEO and content 
+pages.
+Backend NestJS, FastAPI, or Django RESTAll are structured enough for 
+marketplace workflows and future 
+growth.
+--- PAGE 4 ---
+
+Database PostgreSQLStrong relational model and reliable 
+querying for marketplace data.
+Caching / jobs Redis + background workersUseful for search caching, 
+notifications, and async tasks.
+AuthJWT + refresh tokens or managed 
+authSupports secure sessions and mobile-
+friendly login flows.
+Hosting Render, Railway, Fly.io, or cloud VPSGood starting point for a side project 
+with controlled cost.
+Storage S3-compatible object storageSimple and scalable for images and 
+documents.
+3.3 Data Model Overview
+Users: account details, profile data, verification flags, roles, and settings.
+Listings: title, description, category, location, price, condition, visibility, and timestamps.
+Listing images: upload metadata, ordering, and storage references.
+Categories: hierarchical structure for goods, subcategories, and attribute templates.
+Messages and conversations: participant IDs, message content, timestamps, and read state.
+Favorites and saved searches: improve retention and repeat visits.
+Reports and moderation events: support trust and safety operations.
+4. User Experience and UI
+The UI should feel fast, low friction, and trustworthy. Marketplace products succeed when the path from 
+search to contact is obvious and the list of actions on every screen is small.
+4.1 Design Principles
+Mobile-first layouts with responsive expansion for web.
+Clean card-based listing presentation with strong photo hierarchy.
+Minimal form steps when creating a listing.
+High contrast for price, location, and action buttons.
+Trust signals such as verification, seller identity, and report controls.
+4.2 Key Screens
+Onboarding and authentication screens.
+Home feed with featured listings and category shortcuts.
+Search results with filters and sorting.
+Listing details with gallery, seller info, and contact actions.
+Create / edit listing flow.
+Chat or contact inbox.
+Profile and settings.
+Admin/moderation dashboard.
+4.3 Core User Flow
+Buyer journey: open app -> search or browse -> filter listings -> view item details -> contact seller -> 
+save or share listing.
+Seller journey: sign in -> create listing -> upload photos -> publish -> answer inquiries -> mark item as 
+sold.
+Admin journey: review reports -> remove spam or suspicious content -> manage categories and 
+featured content.
+--- PAGE 5 ---
+
+5. Monetization Strategy
+Monetization should start in a way that does not damage trust. Users should still feel that the marketplace 
+is useful even if they never pay.
+Model How it Works Best Use
+Featured listingsSellers pay to boost visibility for a fixed  
+period.Strong fit for vehicles, homes, and 
+high-value items.
+Commission on transactionsTake a percentage when the platform 
+enables in-app payment.Useful only after transaction flow is 
+mature.
+SubscriptionsMonthly seller plans with more listings 
+or analytics.Best for dealers and power users.
+Ads / sponsored placementsDisplay relevant promotional 
+placements in search and category 
+pages.Works once traffic becomes 
+meaningful.
+Lead generationCharge for verified leads or premium 
+contact visibility.Good for home and service 
+categories.
+Value-added servicesVerification, photography, listing 
+optimization, or featured support.Useful for professional sellers.
+6. Development Plan
+The safest way to build Emun is to define a narrow MVP, ship it, validate demand, and expand only after 
+users prove which flows matter.
+6.1 MVP Definition
+User registration and login.
+Profile creation for buyers and sellers.
+Create and manage listings with photos.
+Browse listings by category.
+Search and basic filters.
+Listing detail page with contact actions.
+Favorites or saved listings.
+Admin tools for moderation and category management.
+6.2 Step-by-Step Roadmap
+1.Step 1: define the exact target market, category focus, and launch region.
+2.Step 2: create wireframes and a minimal design system.
+3.Step 3: implement auth, profiles, listing creation, and media upload.
+4.Step 4: build search, categories, and listing detail pages.
+5.Step 5: add messaging or contact actions and basic moderation.
+6.Step 6: test on real devices, fix usability issues, and improve performance.
+7.Step 7: deploy beta, collect user feedback, and monitor analytics.
+8.Step 8: expand features such as saved searches, notifications, and monetization.
+6.3 Suggested Release Phases
+Phase Goal Deliverable
+Prototype Validate core concept Clickable UI or test app
+MVP Launch usable marketplace Listings, search, contact, moderation
+Growth Improve retention Notifications, favorites, seller tools
+Monetization Start revenue Featured listings, subscriptions, ads
+Scale Prepare for larger traffic Search engine, caching, observability
+--- PAGE 6 ---
+
+7. Deployment and Scaling
+For a side project, keep infrastructure simple and inexpensive at the start. Optimize only when the product 
+has real usage.
+7.1 Hosting Options
+Frontend hosting: Vercel, Netlify, Firebase Hosting, or a static hosting bucket.
+Backend hosting: Render, Railway, Fly.io, DigitalOcean App Platform, or a small VPS.
+Database hosting: managed PostgreSQL on Supabase, Neon, RDS, or cloud provider equivalents.
+Media storage: S3-compatible storage such as AWS S3, Cloudflare R2, or Supabase Storage.
+7.2 Scaling Considerations
+Move from database search to a dedicated search service when listings grow.
+Introduce caching for home feed, categories, and hot listings.
+Use background workers for image processing, notifications, and cleanup jobs.
+Separate read-heavy endpoints from write-heavy ones if traffic grows.
+Add monitoring, logs, and alerting early so production issues are visible.
+8. Security and Legal Considerations
+Even a small marketplace needs clear safety rules. Trust and legal clarity are part of the product, not an 
+afterthought.
+Protect accounts with secure password handling, token expiration, rate limiting, and optional two-factor  
+authentication.
+Sanitize inputs and validate file uploads to reduce injection and malicious content risks.
+Provide reporting, blocking, and moderation tools for spam, scams, and abusive users.
+Log sensitive events such as login attempts, listing changes, and moderation actions.
+Create Terms of Service, Privacy Policy, and acceptable use rules before public launch.
+Be careful with local regulations for real estate, financial transactions, and identity verification.
+If payments are introduced, review KYC/AML, chargeback handling, and dispute procedures.
+9. Practical Recommendation for Emun
+For a side project, the strongest first version of Emun is a mobile-first marketplace with a web companion, 
+not a full financial marketplace on day one. Start with listings, search, filters, seller profiles, and direct 
+contact. That gives you something valuable, testable, and realistic to ship.
+A strong implementation path would be Flutter for the app, PostgreSQL for data, a modular backend API, 
+and S3-compatible storage for images. Once the core usage is proven, add monetization features such as 
+featured listings and seller subscriptions.
+End of document
