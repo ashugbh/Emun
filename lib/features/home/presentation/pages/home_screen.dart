@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:emun/core/design_system/emun_design_system.dart';
+import 'package:emun/core/presentation/widgets/metric_tile.dart';
+import 'package:emun/core/presentation/widgets/panel_card.dart';
+import 'package:emun/core/router/route_name.dart';
 import 'package:emun/core/theme/app_colors.dart';
 import 'package:emun/core/widgets/section_header.dart';
 import 'package:emun/features/listings/application/favorites_cubit.dart';
 import 'package:emun/features/listings/application/home_cubit.dart';
 import 'package:emun/features/listings/presentation/widgets/category_chip.dart';
 import 'package:emun/features/listings/presentation/widgets/listing_card.dart';
-import 'package:emun/core/router/route_name.dart';
-import 'package:go_router/go_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, required this.onSearchTap});
@@ -32,7 +34,56 @@ class HomeScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               children: [
                 _HeroHeader(onSearchTap: onSearchTap),
-                const SizedBox(height: 20),
+                const SizedBox(height: 16),
+                const Row(
+                  children: [
+                    Expanded(
+                      child: MetricTile(
+                        label: 'Active sellers',
+                        value: '1.2K',
+                        icon: Icons.people_outline,
+                      ),
+                    ),
+                    SizedBox(width: 8),
+                    Expanded(
+                      child: MetricTile(
+                        label: 'Today listings',
+                        value: '84',
+                        icon: Icons.campaign_outlined,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                SizedBox(
+                  height: 136,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      _QuickActionCard(
+                        title: 'Saved searches',
+                        subtitle: 'Jump back to common filters quickly.',
+                        icon: Icons.bookmarks_outlined,
+                        onTap: onSearchTap,
+                      ),
+                      const SizedBox(width: 10),
+                      _QuickActionCard(
+                        title: 'List in 60 sec',
+                        subtitle: 'Post your item with guided simple steps.',
+                        icon: Icons.bolt_outlined,
+                        onTap: () => context.goNamed(RouteName.main),
+                      ),
+                      const SizedBox(width: 10),
+                      _QuickActionCard(
+                        title: 'Trust tips',
+                        subtitle: 'Use in-app chat before sharing numbers.',
+                        icon: Icons.shield_outlined,
+                        onTap: () {},
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 18),
                 SectionHeader(
                   title: 'Categories',
                   actionLabel: 'Browse',
@@ -43,13 +94,15 @@ class HomeScreen extends StatelessWidget {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: state.categories
-                        .map((category) => Padding(
-                              padding: const EdgeInsets.only(right: 12),
-                              child: CategoryChip(
-                                category: category,
-                                onTap: onSearchTap,
-                              ),
-                            ))
+                        .map(
+                          (category) => Padding(
+                            padding: const EdgeInsets.only(right: 12),
+                            child: CategoryChip(
+                              category: category,
+                              onTap: onSearchTap,
+                            ),
+                          ),
+                        )
                         .toList(),
                   ),
                 ),
@@ -65,7 +118,7 @@ class HomeScreen extends StatelessWidget {
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: state.featured.length,
-                    separatorBuilder: (_, __) => const SizedBox(width: 12),
+                    separatorBuilder: (_, index) => const SizedBox(width: 12),
                     itemBuilder: (context, index) {
                       final listing = state.featured[index];
                       return SizedBox(
@@ -85,7 +138,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
-                SectionHeader(title: 'Newest on Emun'),
+                const SectionHeader(title: 'Newest on Emun'),
                 const SizedBox(height: 12),
                 ...state.latest.map(
                   (listing) => ListingCard(
@@ -98,6 +151,21 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ),
+                const SizedBox(height: 8),
+                const PanelCard(
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Icon(Icons.verified_user_outlined, color: AppColors.primary),
+                      SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          'Always verify item condition in person and use report tools for suspicious behavior.',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -108,9 +176,9 @@ class HomeScreen extends StatelessWidget {
 }
 
 class _HeroHeader extends StatefulWidget {
-  final VoidCallback onSearchTap;
-
   const _HeroHeader({required this.onSearchTap});
+
+  final VoidCallback onSearchTap;
 
   @override
   State<_HeroHeader> createState() => _HeroHeaderState();
@@ -156,7 +224,7 @@ class _HeroHeaderState extends State<_HeroHeader> {
             Text(
               'Explore homes, devices, and vehicles with trusted sellers in one place.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Colors.white.withOpacity(0.85),
+                    color: Colors.white.withValues(alpha: 0.85),
                   ),
             ),
             const SizedBox(height: 16),
@@ -183,6 +251,53 @@ class _HeroHeaderState extends State<_HeroHeader> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _QuickActionCard extends StatelessWidget {
+  const _QuickActionCard({
+    required this.title,
+    required this.subtitle,
+    required this.icon,
+    required this.onTap,
+  });
+
+  final String title;
+  final String subtitle;
+  final IconData icon;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 220,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(18),
+        child: PanelCard(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, color: AppColors.primary),
+              const SizedBox(height: 10),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.muted,
+                    ),
+              ),
+            ],
+          ),
         ),
       ),
     );

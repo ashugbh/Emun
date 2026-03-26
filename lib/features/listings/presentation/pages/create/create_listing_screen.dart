@@ -143,7 +143,8 @@ class _CreateListingViewState extends State<_CreateListingView> {
                         ),
                         const SizedBox(height: 12),
                         DropdownButtonFormField<String>(
-                          value: _selectedCategory,
+                          key: ValueKey('category-$_selectedCategory'),
+                          initialValue: _selectedCategory,
                           decoration: const InputDecoration(labelText: 'Category'),
                           items: _categories
                               .map((category) => DropdownMenuItem(
@@ -155,7 +156,8 @@ class _CreateListingViewState extends State<_CreateListingView> {
                         ),
                         const SizedBox(height: 12),
                         DropdownButtonFormField<String>(
-                          value: _condition,
+                          key: ValueKey('condition-$_condition'),
+                          initialValue: _condition,
                           decoration: const InputDecoration(labelText: 'Condition'),
                           items: const [
                             DropdownMenuItem(value: 'New', child: Text('New')),

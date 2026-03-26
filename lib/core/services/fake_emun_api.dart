@@ -587,6 +587,20 @@ class FakeEmunApi {
     return _listings.where((listing) => listing.seller.id == sellerId).toList();
   }
 
+  Future<List<Listing>> fetchRelatedListings({
+    required String categoryId,
+    required String excludeListingId,
+  }) async {
+    await Future.delayed(_delay);
+    return _listings
+        .where(
+          (listing) =>
+              listing.categoryId == categoryId && listing.id != excludeListingId,
+        )
+        .take(6)
+        .toList();
+  }
+
   Future<Listing> createListing(ListingDraft draft) async {
     await Future.delayed(_delay);
     final category = _categories.firstWhere(

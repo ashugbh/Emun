@@ -8,6 +8,7 @@ import 'package:emun/core/utils/formatters.dart';
 import 'package:emun/core/widgets/empty_state.dart';
 import 'package:emun/features/listings/application/favorites_cubit.dart';
 import 'package:emun/features/listings/application/listing_detail_cubit.dart';
+import 'package:emun/features/listings/presentation/widgets/listing_card.dart';
 
 class ListingDetailScreen extends StatelessWidget {
   final String listingId;
@@ -97,7 +98,7 @@ class _ListingDetailViewState extends State<_ListingDetailView> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.6),
+                            color: Colors.black.withValues(alpha: 0.6),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
@@ -261,6 +262,38 @@ class _ListingDetailViewState extends State<_ListingDetailView> {
                   ),
                 ],
               ),
+              if (state.relatedListings.isNotEmpty) ...[
+                const SizedBox(height: 24),
+                Text(
+                  'Related listings',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                ),
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 275,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: state.relatedListings.length,
+                    separatorBuilder: (_, index) => const SizedBox(width: 10),
+                    itemBuilder: (context, index) {
+                      final related = state.relatedListings[index];
+                      return SizedBox(
+                        width: 240,
+                        child: ListingCard(
+                          listing: related,
+                          compact: true,
+                          isFavorite: favoritesCubit.isFavorite(related.id),
+                          onFavoriteToggle: () => favoritesCubit.toggle(related.id),
+                          onTap: () => context.pushReplacementNamed(
+                            RouteName.listingDetail,
+                            pathParameters: {'id': related.id},
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             ],
           ),
         );

@@ -89,7 +89,7 @@ class _ChatViewState extends State<_ChatView> {
                                     style: Theme.of(context)
                                         .textTheme
                                         .labelSmall
-                                        ?.copyWith(color: textColor.withOpacity(0.7)),
+                                        ?.copyWith(color: textColor.withValues(alpha: 0.7)),
                                   ),
                                 ],
                               ),

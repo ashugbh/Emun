@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:emun/core/application/app/bloc/app_bloc.dart';
+import 'package:emun/core/presentation/widgets/metric_tile.dart';
+import 'package:emun/core/presentation/widgets/panel_card.dart';
 import 'package:emun/core/router/route_name.dart';
 import 'package:emun/core/theme/app_colors.dart';
 import 'package:emun/features/listings/application/favorites_cubit.dart';
@@ -29,13 +32,7 @@ class ProfileScreen extends StatelessWidget {
           child: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: AppColors.border),
-                ),
+              PanelCard(
                 child: Row(
                   children: [
                     CircleAvatar(
@@ -78,38 +75,69 @@ class ProfileScreen extends StatelessWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 12),
+              MetricTile(
+                label: 'Listings',
+                value: profile.listingsCount.toString(),
+                icon: Icons.view_list_outlined,
+              ),
+              const SizedBox(height: 8),
+              MetricTile(
+                label: 'Sold',
+                value: profile.soldCount.toString(),
+                icon: Icons.check_circle_outline,
+              ),
+              const SizedBox(height: 8),
+              MetricTile(
+                label: 'Rating',
+                value: profile.rating.toStringAsFixed(1),
+                icon: Icons.star_border,
+              ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: _StatCard(
-                      label: 'Listings',
-                      value: profile.listingsCount.toString(),
+              PanelCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Seller tools',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _StatCard(
-                      label: 'Sold',
-                      value: profile.soldCount.toString(),
+                    const SizedBox(height: 8),
+                    const _ProfileActionTile(
+                      icon: Icons.shield_outlined,
+                      title: 'Trust center',
+                      subtitle: 'Identity checks, reporting, and moderation logs',
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: _StatCard(
-                      label: 'Rating',
-                      value: profile.rating.toStringAsFixed(1),
+                    const SizedBox(height: 8),
+                    const _ProfileActionTile(
+                      icon: Icons.notifications_active_outlined,
+                      title: 'Listing alerts',
+                      subtitle: 'Get notified when buyers contact you',
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            onPressed: () => context.pushNamed(RouteName.admin),
+                            icon: const Icon(Icons.admin_panel_settings_outlined),
+                            label: const Text('Admin'),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () => context.read<AppBloc>().toggleTheme(),
+                            icon: const Icon(Icons.contrast_outlined),
+                            label: const Text('Theme'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: () => context.pushNamed(RouteName.admin),
-                icon: const Icon(Icons.admin_panel_settings_outlined),
-                label: const Text('Open Admin Dashboard'),
-              ),
-              const SizedBox(height: 24),
               Text(
                 'My listings',
                 style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
@@ -137,33 +165,40 @@ class ProfileScreen extends StatelessWidget {
   }
 }
 
-class _StatCard extends StatelessWidget {
-  final String label;
-  final String value;
+class _ProfileActionTile extends StatelessWidget {
+  const _ProfileActionTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+  });
 
-  const _StatCard({required this.label, required this.value});
+  final IconData icon;
+  final String title;
+  final String subtitle;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.cardTint,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        children: [
-          Text(
-            value,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(icon, size: 20, color: AppColors.primary),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+              ),
+              Text(
+                subtitle,
+                style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.muted),
+              ),
+            ],
           ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.muted),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

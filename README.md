@@ -1,16 +1,30 @@
-# emun
+# Emun Flutter App
 
-A new Flutter project.
+Flutter frontend for Emun marketplace.
 
-## Getting Started
+## Backend Location
+- Backend is now separated from the Flutter app and lives at:
+  - `C:\Users\esh\Documents\Flutter projects\emun_backend`
 
-This project is a starting point for a Flutter application.
+## Run Backend
+```bash
+cd "C:\Users\esh\Documents\Flutter projects\emun_backend"
+python manage.py migrate
+python manage.py seed_emun_data
+python manage.py runserver
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Run Flutter App
+```bash
+cd "C:\Users\esh\Documents\Flutter projects\Emun"
+flutter run
+```
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## API Base URL
+- Default:
+  - Android emulator: `http://10.0.2.2:8000/api/v1`
+  - iOS simulator / desktop: `http://127.0.0.1:8000/api/v1`
+- Override manually:
+```bash
+flutter run --dart-define=EMUN_API_BASE_URL=http://<your-ip>:8000/api/v1
+```

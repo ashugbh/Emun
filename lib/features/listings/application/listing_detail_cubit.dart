@@ -6,28 +6,32 @@ import 'package:emun/features/listings/domain/repositories/listings_repository.d
 class ListingDetailState extends Equatable {
   final bool isLoading;
   final Listing? listing;
+  final List<Listing> relatedListings;
   final String? error;
 
   const ListingDetailState({
     this.isLoading = false,
     this.listing,
+    this.relatedListings = const [],
     this.error,
   });
 
   ListingDetailState copyWith({
     bool? isLoading,
     Listing? listing,
+    List<Listing>? relatedListings,
     String? error,
   }) {
     return ListingDetailState(
       isLoading: isLoading ?? this.isLoading,
       listing: listing ?? this.listing,
+      relatedListings: relatedListings ?? this.relatedListings,
       error: error,
     );
   }
 
   @override
-  List<Object?> get props => [isLoading, listing, error];
+  List<Object?> get props => [isLoading, listing, relatedListings, error];
 }
 
 class ListingDetailCubit extends Cubit<ListingDetailState> {
@@ -41,7 +45,21 @@ class ListingDetailCubit extends Cubit<ListingDetailState> {
     emit(state.copyWith(isLoading: true));
     try {
       final listing = await _repository.fetchListing(listingId);
-      emit(state.copyWith(isLoading: false, listing: listing));
+      if (listing == null) {
+        emit(state.copyWith(isLoading: false, listing: null, relatedListings: const []));
+        return;
+      }
+      final relatedListings = await _repository.fetchRelatedListings(
+        categoryId: listing.categoryId,
+        excludeListingId: listing.id,
+      );
+      emit(
+        state.copyWith(
+          isLoading: false,
+          listing: listing,
+          relatedListings: relatedListings,
+        ),
+      );
     } catch (error) {
       emit(state.copyWith(isLoading: false, error: error.toString()));
     }

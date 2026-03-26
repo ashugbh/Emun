@@ -1,5 +1,7 @@
 ﻿import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:emun/core/application/app/bloc/app_bloc.dart';
+import 'package:emun/core/application/app/bloc/app_state.dart';
 import 'package:emun/core/di/dependancy_manager.dart';
 import 'package:emun/core/router/router.dart';
 import 'package:emun/core/theme/app_theme.dart';
@@ -13,15 +15,18 @@ class AppWidget extends StatelessWidget {
     final favoritesCubit = getIt<FavoritesCubit>()..load();
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (_) => AppBloc()),
         BlocProvider.value(value: favoritesCubit),
       ],
-      child: MaterialApp.router(
-        title: 'Emun',
-        theme: AppTheme.lightTheme(),
-        darkTheme: AppTheme.darkTheme(),
-        themeMode: ThemeMode.light,
-        routerConfig: router,
-        debugShowCheckedModeBanner: false,
+      child: BlocBuilder<AppBloc, AppState>(
+        builder: (context, state) => MaterialApp.router(
+          title: 'Emun',
+          theme: AppTheme.lightTheme(),
+          darkTheme: AppTheme.darkTheme(),
+          themeMode: state.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+          routerConfig: router,
+          debugShowCheckedModeBanner: false,
+        ),
       ),
     );
   }

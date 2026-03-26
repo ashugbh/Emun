@@ -59,7 +59,7 @@ class ListingCard extends StatelessWidget {
                     onTap: onFavoriteToggle,
                     child: CircleAvatar(
                       radius: 18,
-                      backgroundColor: Colors.white.withOpacity(0.9),
+                      backgroundColor: Colors.white.withValues(alpha: 0.9),
                       child: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,
                         color: isFavorite ? AppColors.accent : AppColors.muted,
@@ -74,7 +74,7 @@ class ListingCard extends StatelessWidget {
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
-                      color: AppColors.ink.withOpacity(0.75),
+                      color: AppColors.ink.withValues(alpha: 0.75),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(

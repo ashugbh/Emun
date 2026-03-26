@@ -6,34 +6,32 @@ import 'package:emun/core/router/route_name.dart';
 import 'package:emun/core/widgets/primary_button.dart';
 import 'package:emun/features/auth/application/auth_cubit.dart';
 
-class RegisterScreen extends StatelessWidget {
-  const RegisterScreen({super.key});
+class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<AuthCubit>(),
-      child: const _RegisterView(),
+      child: const _LoginView(),
     );
   }
 }
 
-class _RegisterView extends StatefulWidget {
-  const _RegisterView();
+class _LoginView extends StatefulWidget {
+  const _LoginView();
 
   @override
-  State<_RegisterView> createState() => _RegisterViewState();
+  State<_LoginView> createState() => _LoginViewState();
 }
 
-class _RegisterViewState extends State<_RegisterView> {
+class _LoginViewState extends State<_LoginView> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
   final _identifierController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _nameController.dispose();
     _identifierController.dispose();
     _passwordController.dispose();
     super.dispose();
@@ -49,12 +47,12 @@ class _RegisterViewState extends State<_RegisterView> {
       },
       builder: (context, state) {
         return Scaffold(
-          appBar: AppBar(title: const Text('Create account')),
+          appBar: AppBar(title: const Text('Welcome back')),
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
               Text(
-                'Start listing items and chatting with buyers today.',
+                'Sign in to manage your listings and messages.',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 20),
@@ -63,19 +61,10 @@ class _RegisterViewState extends State<_RegisterView> {
                 child: Column(
                   children: [
                     TextFormField(
-                      controller: _nameController,
-                      decoration: const InputDecoration(labelText: 'Full name'),
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return 'Enter your name';
-                        }
-                        return null;
-                      },
-                    ),
-                    const SizedBox(height: 12),
-                    TextFormField(
                       controller: _identifierController,
-                      decoration: const InputDecoration(labelText: 'Email or phone'),
+                      decoration: const InputDecoration(
+                        labelText: 'Email or phone',
+                      ),
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Enter your email or phone number';
@@ -90,30 +79,38 @@ class _RegisterViewState extends State<_RegisterView> {
                       obscureText: true,
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
-                          return 'Create a password';
+                          return 'Enter your password';
                         }
                         return null;
                       },
                     ),
                     const SizedBox(height: 20),
                     PrimaryButton(
-                      label: 'Create account',
+                      label: 'Sign in',
                       isLoading: state.isLoading,
                       onPressed: () {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         }
-                        context.read<AuthCubit>().register(
-                              name: _nameController.text.trim(),
-                              identifier: _identifierController.text.trim(),
-                              password: _passwordController.text.trim(),
-                            );
+                        context.read<AuthCubit>().login(
+                          identifier: _identifierController.text.trim(),
+                          password: _passwordController.text.trim(),
+                        );
                       },
                     ),
+                    if (state.error != null) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        state.error!,
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: Colors.red.shade700,
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 12),
                     TextButton(
-                      onPressed: () => context.goNamed(RouteName.login),
-                      child: const Text('I already have an account'),
+                      onPressed: () => context.goNamed(RouteName.register),
+                      child: const Text('Create a new account'),
                     ),
                   ],
                 ),

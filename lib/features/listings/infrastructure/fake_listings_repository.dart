@@ -29,5 +29,11 @@ class FakeListingsRepository implements ListingsRepository {
   Future<List<Listing>> fetchListingsBySeller(String sellerId) => _api.fetchListingsBySeller(sellerId);
 
   @override
+  Future<List<Listing>> fetchRelatedListings({
+    required String categoryId,
+    required String excludeListingId,
+  }) => _api.fetchRelatedListings(categoryId: categoryId, excludeListingId: excludeListingId);
+
+  @override
   Future<Listing> createListing(ListingDraft draft) => _api.createListing(draft);
 }

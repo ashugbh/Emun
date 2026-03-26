@@ -10,5 +10,9 @@ abstract class ListingsRepository {
   Future<List<Listing>> searchListings(ListingsSearchQuery query);
   Future<Listing?> fetchListing(String id);
   Future<List<Listing>> fetchListingsBySeller(String sellerId);
+  Future<List<Listing>> fetchRelatedListings({
+    required String categoryId,
+    required String excludeListingId,
+  });
   Future<Listing> createListing(ListingDraft draft);
 }
