@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:emun/core/di/dependancy_manager.dart';
 import 'package:emun/core/router/route_name.dart';
 import 'package:emun/core/widgets/primary_button.dart';
-import 'package:emun/features/auth/application/auth_cubit.dart';
+import 'package:emun/features/auth/application/bloc/auth_bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -12,7 +12,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AuthCubit>(),
+      create: (_) => getIt<AuthBloc>(),
       child: const _LoginView(),
     );
   }
@@ -39,7 +39,7 @@ class _LoginViewState extends State<_LoginView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state.isAuthenticated) {
           context.goNamed(RouteName.main);
@@ -92,7 +92,7 @@ class _LoginViewState extends State<_LoginView> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         }
-                        context.read<AuthCubit>().login(
+                        context.read<AuthBloc>().login(
                           identifier: _identifierController.text.trim(),
                           password: _passwordController.text.trim(),
                         );

@@ -6,16 +6,16 @@ import 'package:emun/core/presentation/widgets/metric_tile.dart';
 import 'package:emun/core/presentation/widgets/panel_card.dart';
 import 'package:emun/core/router/route_name.dart';
 import 'package:emun/core/theme/app_colors.dart';
-import 'package:emun/features/listings/application/favorites_cubit.dart';
+import 'package:emun/features/listings/application/bloc/favorites_bloc.dart';
 import 'package:emun/features/listings/presentation/widgets/listing_card.dart';
-import 'package:emun/features/profile/application/profile_cubit.dart';
+import 'package:emun/features/profile/application/bloc/profile_bloc.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ProfileCubit, ProfileState>(
+    return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         if (state.isLoading) {
           return const Center(child: CircularProgressIndicator());
@@ -26,7 +26,7 @@ class ProfileScreen extends StatelessWidget {
           return const Center(child: Text('Profile unavailable'));
         }
 
-        final favorites = context.watch<FavoritesCubit>();
+        final favorites = context.watch<FavoritesBloc>();
 
         return SafeArea(
           child: ListView(

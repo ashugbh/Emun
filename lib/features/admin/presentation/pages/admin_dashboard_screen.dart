@@ -4,7 +4,7 @@ import 'package:emun/core/di/dependancy_manager.dart';
 import 'package:emun/core/presentation/widgets/metric_tile.dart';
 import 'package:emun/core/presentation/widgets/panel_card.dart';
 import 'package:emun/core/theme/app_colors.dart';
-import 'package:emun/features/admin/application/admin_cubit.dart';
+import 'package:emun/features/admin/application/bloc/admin_bloc.dart';
 
 class AdminDashboardScreen extends StatelessWidget {
   const AdminDashboardScreen({super.key});
@@ -12,10 +12,10 @@ class AdminDashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AdminCubit>()..load(),
+      create: (_) => getIt<AdminBloc>()..load(),
       child: Scaffold(
         appBar: AppBar(title: const Text('Admin dashboard')),
-        body: BlocBuilder<AdminCubit, AdminState>(
+        body: BlocBuilder<AdminBloc, AdminState>(
           builder: (context, state) {
             if (state.isLoading) {
               return const Center(child: CircularProgressIndicator());

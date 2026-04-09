@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:emun/core/di/dependancy_manager.dart';
 import 'package:emun/core/router/route_name.dart';
 import 'package:emun/core/widgets/primary_button.dart';
-import 'package:emun/features/auth/application/auth_cubit.dart';
+import 'package:emun/features/auth/application/bloc/auth_bloc.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -12,7 +12,7 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AuthCubit>(),
+      create: (_) => getIt<AuthBloc>(),
       child: const _RegisterView(),
     );
   }
@@ -41,7 +41,7 @@ class _RegisterViewState extends State<_RegisterView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<AuthCubit, AuthState>(
+    return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state.isAuthenticated) {
           context.goNamed(RouteName.main);
@@ -105,7 +105,7 @@ class _RegisterViewState extends State<_RegisterView> {
                         if (!_formKey.currentState!.validate()) {
                           return;
                         }
-                        context.read<AuthCubit>().register(
+                        context.read<AuthBloc>().register(
                           name: _nameController.text.trim(),
                           identifier: _identifierController.text.trim(),
                           password: _passwordController.text.trim(),
