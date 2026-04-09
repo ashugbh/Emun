@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:emun/core/di/dependancy_manager.dart';
 import 'package:emun/core/theme/app_colors.dart';
 import 'package:emun/core/utils/formatters.dart';
-import 'package:emun/features/messages/application/chat_cubit.dart';
+import 'package:emun/features/messages/application/bloc/chat_bloc.dart';
 
 class ChatScreen extends StatelessWidget {
   final String conversationId;
@@ -14,7 +14,7 @@ class ChatScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<ChatCubit>(param1: conversationId)..load(),
+      create: (_) => getIt<ChatBloc>(param1: conversationId)..load(),
       child: _ChatView(listingTitle: listingTitle),
     );
   }
@@ -40,7 +40,7 @@ class _ChatViewState extends State<_ChatView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatCubit, ChatState>(
+    return BlocBuilder<ChatBloc, ChatState>(
       builder: (context, state) {
         final title = state.conversation?.listing.title ?? widget.listingTitle ?? 'Chat';
 
@@ -116,7 +116,7 @@ class _ChatViewState extends State<_ChatView> {
                         onPressed: () {
                           final text = _controller.text.trim();
                           if (text.isEmpty) return;
-                          context.read<ChatCubit>().send(text);
+                          context.read<ChatBloc>().send(text);
                           _controller.clear();
                         },
                         icon: const Icon(Icons.send),

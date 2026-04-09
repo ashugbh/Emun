@@ -1,22 +1,19 @@
-﻿import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Message extends Equatable {
-  final String id;
-  final String conversationId;
-  final String senderId;
-  final String text;
-  final DateTime sentAt;
-  final bool isMine;
+part 'message.freezed.dart';
+part 'message.g.dart';
 
-  const Message({
-    required this.id,
-    required this.conversationId,
-    required this.senderId,
-    required this.text,
-    required this.sentAt,
-    required this.isMine,
-  });
+@freezed
+class Message with _$Message {
+  const factory Message({
+    required String id,
+    required String conversationId,
+    required String senderId,
+    required String text,
+    required DateTime sentAt,
+    required bool isMine,
+  }) = _Message;
 
-  @override
-  List<Object?> get props => [id, conversationId, senderId, text, sentAt, isMine];
+  factory Message.fromJson(Map<String, dynamic> json) =>
+      _$MessageFromJson(json);
 }

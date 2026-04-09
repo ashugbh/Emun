@@ -5,14 +5,14 @@ import 'package:emun/core/router/route_name.dart';
 import 'package:emun/core/theme/app_colors.dart';
 import 'package:emun/core/utils/formatters.dart';
 import 'package:emun/core/widgets/empty_state.dart';
-import 'package:emun/features/messages/application/inbox_cubit.dart';
+import 'package:emun/features/messages/application/bloc/inbox_bloc.dart';
 
 class InboxScreen extends StatelessWidget {
   const InboxScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<InboxCubit, InboxState>(
+    return BlocBuilder<InboxBloc, InboxState>(
       builder: (context, state) {
         if (state.isLoading) {
           return const Center(child: CircularProgressIndicator());
