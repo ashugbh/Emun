@@ -1,40 +1,26 @@
-﻿import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:emun/features/listings/domain/entities/category.dart';
 import 'package:emun/features/listings/domain/entities/listing.dart';
 import 'package:emun/features/listings/domain/entities/search_query.dart';
-import 'package:emun/features/listings/domain/repositories/listings_repository.dart';
 
 const Object _unset = Object();
 
 class SearchPreset extends Equatable {
-  final String title;
-  final String query;
-  final String? categoryId;
-
   const SearchPreset({
     required this.title,
     required this.query,
     this.categoryId,
   });
 
+  final String title;
+  final String query;
+  final String? categoryId;
+
   @override
   List<Object?> get props => [title, query, categoryId];
 }
 
 class SearchState extends Equatable {
-  final bool isLoading;
-  final String query;
-  final String? categoryId;
-  final String? condition;
-  final double? minPrice;
-  final double? maxPrice;
-  final ListingSort sort;
-  final List<Category> categories;
-  final List<Listing> results;
-  final List<SearchPreset> savedPresets;
-  final String? error;
-
   const SearchState({
     this.isLoading = false,
     this.query = '',
@@ -52,6 +38,18 @@ class SearchState extends Equatable {
     ],
     this.error,
   });
+
+  final bool isLoading;
+  final String query;
+  final String? categoryId;
+  final String? condition;
+  final double? minPrice;
+  final double? maxPrice;
+  final ListingSort sort;
+  final List<Category> categories;
+  final List<Listing> results;
+  final List<SearchPreset> savedPresets;
+  final String? error;
 
   SearchState copyWith({
     bool? isLoading,
@@ -106,64 +104,4 @@ class SearchState extends Equatable {
         savedPresets,
         error,
       ];
-}
-
-class SearchCubit extends Cubit<SearchState> {
-  SearchCubit(this._repository) : super(const SearchState());
-
-  final ListingsRepository _repository;
-
-  Future<void> load() async {
-    final categories = await _repository.fetchCategories();
-    emit(state.copyWith(categories: categories));
-  }
-
-  void updateQuery(String value) => emit(state.copyWith(query: value));
-
-  void updateCategory(String? value) => emit(state.copyWith(categoryId: value));
-
-  void updateCondition(String? value) => emit(state.copyWith(condition: value));
-
-  void updateSort(ListingSort value) => emit(state.copyWith(sort: value));
-
-  void updatePriceRange(double? minPrice, double? maxPrice) {
-    emit(state.copyWith(minPrice: minPrice, maxPrice: maxPrice));
-  }
-
-  void applyPreset(SearchPreset preset) {
-    emit(
-      state.copyWith(
-        query: preset.query,
-        categoryId: preset.categoryId,
-        condition: null,
-        minPrice: null,
-        maxPrice: null,
-        sort: ListingSort.newest,
-      ),
-    );
-    search();
-  }
-
-  void saveCurrentSearch() {
-    if (state.query.trim().isEmpty) {
-      return;
-    }
-    final preset = SearchPreset(
-      title: state.query.trim(),
-      query: state.query.trim(),
-      categoryId: state.categoryId,
-    );
-    final next = [preset, ...state.savedPresets.where((item) => item.query != preset.query)];
-    emit(state.copyWith(savedPresets: next.take(6).toList()));
-  }
-
-  Future<void> search() async {
-    emit(state.copyWith(isLoading: true));
-    try {
-      final results = await _repository.searchListings(state.toQuery());
-      emit(state.copyWith(isLoading: false, results: results));
-    } catch (error) {
-      emit(state.copyWith(isLoading: false, error: error.toString()));
-    }
-  }
 }

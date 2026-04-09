@@ -6,8 +6,8 @@ import 'package:emun/core/router/route_name.dart';
 import 'package:emun/core/theme/app_colors.dart';
 import 'package:emun/core/utils/formatters.dart';
 import 'package:emun/core/widgets/empty_state.dart';
-import 'package:emun/features/listings/application/favorites_cubit.dart';
-import 'package:emun/features/listings/application/listing_detail_cubit.dart';
+import 'package:emun/features/listings/application/bloc/favorites_bloc.dart';
+import 'package:emun/features/listings/application/bloc/listing_detail_bloc.dart';
 import 'package:emun/features/listings/presentation/widgets/listing_card.dart';
 
 class ListingDetailScreen extends StatelessWidget {
@@ -18,7 +18,7 @@ class ListingDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<ListingDetailCubit>(param1: listingId)..load(),
+      create: (_) => getIt<ListingDetailBloc>(param1: listingId)..load(),
       child: const _ListingDetailView(),
     );
   }
@@ -36,7 +36,7 @@ class _ListingDetailViewState extends State<_ListingDetailView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ListingDetailCubit, ListingDetailState>(
+    return BlocBuilder<ListingDetailBloc, ListingDetailState>(
       builder: (context, state) {
         if (state.isLoading) {
           return const Scaffold(
@@ -55,8 +55,8 @@ class _ListingDetailViewState extends State<_ListingDetailView> {
           );
         }
 
-        final favoritesCubit = context.watch<FavoritesCubit>();
-        final isFavorite = favoritesCubit.isFavorite(listing.id);
+        final favoritesBloc = context.watch<FavoritesBloc>();
+        final isFavorite = favoritesBloc.isFavorite(listing.id);
 
         return Scaffold(
           appBar: AppBar(
@@ -67,7 +67,7 @@ class _ListingDetailViewState extends State<_ListingDetailView> {
                   isFavorite ? Icons.favorite : Icons.favorite_border,
                   color: isFavorite ? AppColors.accent : AppColors.ink,
                 ),
-                onPressed: () => favoritesCubit.toggle(listing.id),
+                onPressed: () => favoritesBloc.toggle(listing.id),
               ),
             ],
           ),
@@ -282,8 +282,8 @@ class _ListingDetailViewState extends State<_ListingDetailView> {
                         child: ListingCard(
                           listing: related,
                           compact: true,
-                          isFavorite: favoritesCubit.isFavorite(related.id),
-                          onFavoriteToggle: () => favoritesCubit.toggle(related.id),
+                          isFavorite: favoritesBloc.isFavorite(related.id),
+                          onFavoriteToggle: () => favoritesBloc.toggle(related.id),
                           onTap: () => context.pushReplacementNamed(
                             RouteName.listingDetail,
                             pathParameters: {'id': related.id},

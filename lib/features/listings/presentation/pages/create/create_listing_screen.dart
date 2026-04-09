@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:emun/core/di/dependancy_manager.dart';
 import 'package:emun/core/theme/app_colors.dart';
 import 'package:emun/core/widgets/primary_button.dart';
-import 'package:emun/features/listings/application/create_listing_cubit.dart';
+import 'package:emun/features/listings/application/bloc/create_listing_bloc.dart';
 import 'package:emun/features/listings/domain/entities/category.dart';
 import 'package:emun/features/listings/domain/entities/listing_draft.dart';
 import 'package:emun/features/listings/domain/repositories/listings_repository.dart';
@@ -14,7 +14,7 @@ class CreateListingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<CreateListingCubit>(),
+      create: (_) => getIt<CreateListingBloc>(),
       child: const _CreateListingView(),
     );
   }
@@ -64,7 +64,7 @@ class _CreateListingViewState extends State<_CreateListingView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<CreateListingCubit, CreateListingState>(
+    return BlocListener<CreateListingBloc, CreateListingState>(
       listener: (context, state) {
         if (state.status == CreateListingStatus.success) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -190,7 +190,7 @@ class _CreateListingViewState extends State<_CreateListingView> {
                           },
                         ),
                         const SizedBox(height: 20),
-                        BlocBuilder<CreateListingCubit, CreateListingState>(
+                        BlocBuilder<CreateListingBloc, CreateListingState>(
                           builder: (context, state) {
                             return PrimaryButton(
                               label: 'Publish listing',
@@ -203,7 +203,7 @@ class _CreateListingViewState extends State<_CreateListingView> {
                                   (item) => item.id == _selectedCategory,
                                   orElse: () => _categories.first,
                                 );
-                                context.read<CreateListingCubit>().submit(
+                                context.read<CreateListingBloc>().submit(
                                       ListingDraft(
                                         title: _titleController.text.trim(),
                                         description: _descriptionController.text.trim(),

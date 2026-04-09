@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 import 'package:emun/core/presentation/widgets/panel_card.dart';
 import 'package:emun/core/router/route_name.dart';
 import 'package:emun/core/widgets/empty_state.dart';
-import 'package:emun/features/listings/application/favorites_cubit.dart';
+import 'package:emun/features/listings/application/bloc/favorites_bloc.dart';
 import 'package:emun/features/listings/domain/entities/search_query.dart';
 import 'package:emun/features/listings/presentation/widgets/listing_card.dart';
-import 'package:emun/features/search/application/search_cubit.dart';
+import 'package:emun/features/search/application/bloc/search_bloc.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -31,9 +31,9 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SearchCubit, SearchState>(
+    return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        final favorites = context.watch<FavoritesCubit>();
+        final favorites = context.watch<FavoritesBloc>();
 
         if (_queryController.text != state.query) {
           _queryController.text = state.query;
@@ -52,7 +52,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     ),
                   ),
                   TextButton.icon(
-                    onPressed: context.read<SearchCubit>().saveCurrentSearch,
+                    onPressed: context.read<SearchBloc>().saveCurrentSearch,
                     icon: const Icon(Icons.bookmark_border),
                     label: const Text('Save'),
                   ),
@@ -69,7 +69,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           child: ActionChip(
                             avatar: const Icon(Icons.flash_on, size: 16),
                             label: Text(preset.title),
-                            onPressed: () => context.read<SearchCubit>().applyPreset(preset),
+                            onPressed: () => context.read<SearchBloc>().applyPreset(preset),
                           ),
                         ),
                       )
@@ -86,7 +86,7 @@ class _SearchScreenState extends State<SearchScreen> {
                         prefixIcon: Icon(Icons.search),
                         hintText: 'Search homes, phones, vehicles',
                       ),
-                      onChanged: context.read<SearchCubit>().updateQuery,
+                      onChanged: context.read<SearchBloc>().updateQuery,
                     ),
                     const SizedBox(height: 12),
                     Row(
@@ -104,7 +104,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                               ),
                             ],
-                            onChanged: context.read<SearchCubit>().updateCategory,
+                            onChanged: context.read<SearchBloc>().updateCategory,
                           ),
                         ),
                         const SizedBox(width: 12),
@@ -118,7 +118,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               DropdownMenuItem<String?>(value: 'Used', child: Text('Used')),
                               DropdownMenuItem<String?>(value: 'Refurbished', child: Text('Refurbished')),
                             ],
-                            onChanged: context.read<SearchCubit>().updateCondition,
+                            onChanged: context.read<SearchBloc>().updateCondition,
                           ),
                         ),
                       ],
@@ -155,7 +155,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       ],
                       onChanged: (value) {
                         if (value != null) {
-                          context.read<SearchCubit>().updateSort(value);
+                          context.read<SearchBloc>().updateSort(value);
                         }
                       },
                     ),
@@ -166,8 +166,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         onPressed: () {
                           final minPrice = double.tryParse(_minPriceController.text.trim());
                           final maxPrice = double.tryParse(_maxPriceController.text.trim());
-                          context.read<SearchCubit>().updatePriceRange(minPrice, maxPrice);
-                          context.read<SearchCubit>().search();
+                          context.read<SearchBloc>().updatePriceRange(minPrice, maxPrice);
+                          context.read<SearchBloc>().search();
                         },
                         icon: const Icon(Icons.tune),
                         label: const Text('Apply filters'),
