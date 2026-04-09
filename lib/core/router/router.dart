@@ -1,12 +1,12 @@
 ﻿import 'package:go_router/go_router.dart';
 import 'package:emun/core/navigation/navigation_service.dart';
-import 'package:emun/core/presentation/main/main_screen.dart';
 import 'package:emun/core/router/route_name.dart';
 import 'package:emun/features/admin/presentation/pages/admin_dashboard_screen.dart';
 import 'package:emun/features/auth/presentation/pages/login/login_screen.dart';
 import 'package:emun/features/auth/presentation/pages/onboarding/onboarding_screen.dart';
 import 'package:emun/features/auth/presentation/pages/registration/register_screen.dart';
 import 'package:emun/features/listings/presentation/pages/detail/listing_detail_screen.dart';
+import 'package:emun/features/main/presentation/main_screen.dart';
 import 'package:emun/features/messages/presentation/pages/chat/chat_screen.dart';
 
 final router = GoRouter(

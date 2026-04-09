@@ -7,6 +7,7 @@ import 'package:emun/features/admin/domain/entities/moderation_report.dart';
 import 'package:emun/features/listings/domain/entities/category.dart';
 import 'package:emun/features/listings/domain/entities/listing.dart';
 import 'package:emun/features/listings/domain/entities/listing_draft.dart';
+import 'package:emun/features/messages/domain/entities/listing_summary.dart';
 import 'package:emun/features/listings/domain/entities/search_query.dart';
 import 'package:emun/features/messages/domain/entities/conversation.dart';
 import 'package:emun/features/messages/domain/entities/message.dart';
